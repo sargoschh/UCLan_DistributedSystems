@@ -1,5 +1,5 @@
 {
-  "name": "jokesapi",
+  "name": "firstapi2",
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
@@ -10,6 +10,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^5.1.0"
   }
 }
