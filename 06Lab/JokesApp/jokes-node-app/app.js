@@ -3,14 +3,12 @@ const app = express();
 require('dotenv').config();
 const path = require('path');
 
-const DB_TYPE = process.env.DB_TYPE || 'MONGO'
+const DB_TYPE = process.env.DB_TYPE || 'mongo-db'
 const MYSQL_MODULE = process.env.MYSQL_MODULE || '../dbModules/mysql-database-fns'
 const MONGO_MODULE = process.env.MONGO_MODULE || '../dbModules/mongo-database-fns'
 const db = (DB_TYPE === 'MYSQL') ? require(`${MYSQL_MODULE}`) : require(`${MONGO_MODULE}`) // import all mysql or mongo database functions as an object
 
 const PORT = process.env.ETL_PORT || 3000
-//const STAGING_AREA = process.env.STAGING_AREA || './data'
-//const dataPath = path.resolve(__dirname, STAGING_AREA)
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -20,6 +18,9 @@ app.get("/", (req, res) => {
 });
 
 app.get('/types', (req, res) => {
+  console.log(DB_TYPE);
+  console.log(db);
+  console.log(PORT);
   db.getData('types', []).then((results, err) => {
     if (err) {
       console.error('Error fetching joke types:', err);

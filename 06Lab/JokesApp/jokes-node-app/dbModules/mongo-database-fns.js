@@ -1,12 +1,20 @@
 const mongoose = require('mongoose');
-const jokesJson = require('../DataJson/jokes.json')
-const typesJson = require('../DataJson/types.json')
+// const jokesJson = require('../../DataJson/jokes.json')
+// const typesJson = require('../../DataJson/types.json')
 require('dotenv').config(); // Move this to top
 
-const DB_NAME = process.env.DATABASE || 'jokesapp';
+const DB_NAME = process.env.DB_NAME || 'jokesapp';
 const MONGO_HOST = process.env.HOST_NAME || 'localhost';
 const MONGO_PORT = process.env.MONGO_PORT || 27017;
-const conStr = `mongodb://${MONGO_HOST}:${MONGO_PORT}/${DB_NAME}`;
+const MONGO_USER = process.env.USER_NAME;
+const MONGO_PASS = process.env.DB_PASSWORD;
+
+// New authenticated connection string format:
+// mongodb://<user>:<password>@<host>:<port>/<db>?authSource=admin
+const conStr = `mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}:${MONGO_PORT}/${DB_NAME}?authSource=admin`; 
+
+// The 'authSource=admin' query parameter is necessary because the user
+// (jokes_user) is a root user created in the MongoDB 'admin' database.
 
 // Define schemas
 const typeSchema = new mongoose.Schema({
@@ -89,34 +97,34 @@ async function getData(collectionName, conditions = []) {
     }
 }
 
-async function createTypesCollection() {
-    try {
-        await Type.insertMany(typesJson);
-        var typesCount = await Type.countDocuments();
-        console.log(`Types collection initialized with ${typesCount} documents.`);
-        return true;
-    } catch (err) {
-        throw err;
-    }
-}
+// async function createTypesCollection() {
+//     try {
+//         await Type.insertMany(typesJson);
+//         var typesCount = await Type.countDocuments();
+//         console.log(`Types collection initialized with ${typesCount} documents.`);
+//         return true;
+//     } catch (err) {
+//         throw err;
+//     }
+// }
 
-async function createJokesCollection() {
-    try {
-        await Joke.insertMany(jokesJson);
-        var jokesCount = await Joke.countDocuments();
-        console.log(`Jokes collection initialized with ${jokesCount} documents.`);
-        return true;
-    } catch (err) {
-        throw err;
-    }
-}
+// async function createJokesCollection() {
+//     try {
+//         await Joke.insertMany(jokesJson);
+//         var jokesCount = await Joke.countDocuments();
+//         console.log(`Jokes collection initialized with ${jokesCount} documents.`);
+//         return true;
+//     } catch (err) {
+//         throw err;
+//     }
+// }
 
 async function isConnected() {
     try {
         const dbName = await connectToMongoDB();
 
-        if (await Type.countDocuments() === 0) await createTypesCollection();
-        if (await Joke.countDocuments() === 0) await createJokesCollection();
+        // if (await Type.countDocuments() === 0) await createTypesCollection();
+        // if (await Joke.countDocuments() === 0) await createJokesCollection();
 
         return dbName === DB_NAME;
     } catch (err) {

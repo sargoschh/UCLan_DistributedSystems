@@ -8,7 +8,7 @@ function initDBPool() {
         user: process.env.USER_NAME || 'root',
         password: process.env.DB_PASSWORD || 'admin',
         database: process.env.DB_NAME || 'jokesapp',
-        port: process.env.MYSQL_PORT || 3306,
+        port: 3306,
 
         waitForConnections: true,
         connectionLimit: 10,
