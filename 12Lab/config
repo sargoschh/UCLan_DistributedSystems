@@ -1,0 +1,44 @@
+Host bastion
+  HostName 51.140.206.200
+  User tony
+  IdentityFile C:/key/az.pem
+  IdentitiesOnly yes # Only try to connect with the key in the identity file
+
+Host app1
+  HostName 10.0.1.4
+  User tony
+  IdentityFile C:/key/az.pem
+  ProxyJump bastion
+  IdentitiesOnly yes
+
+  Host app2
+  HostName 10.0.1.5
+  User tony
+  IdentityFile C:/key/az.pem
+  ProxyJump bastion
+  IdentitiesOnly yes
+
+Host app3
+  HostName 10.0.1.6
+  User tony
+  IdentityFile C:/key/az.pem
+  ProxyJump bastion
+  IdentitiesOnly yes
+
+Host rabbitmq
+  HostName 10.0.1.7
+  User tony
+  IdentityFile C:/key/az.pem
+  ProxyJump bastion
+  IdentitiesOnly yes
+
+# Login to RabbitMQ VM via bastion. Management UI runs locally on that VM
+# Process is: ssh rabbit-ui -> logs in to 10.0.1.7 -> localhost:15672
+# -> forwards to 127.0.0.1:15672 on rabbit 
+Host rabbit-ui
+  HostName 10.0.1.7
+  User tony
+  IdentityFile C:/key/az.pem
+  ProxyJump bastion
+  IdentitiesOnly yes
+  LocalForward 15672 127.0.0.1:15672 # Map local browser port to RabbitMQ UI on the VM
