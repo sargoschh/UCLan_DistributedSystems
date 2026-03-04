@@ -1,0 +1,25 @@
+_format_version: "3.0"
+services:
+  - name: joke-service
+    url: http://jokes-node-app:3000
+    routes:
+      - name: joke-route
+        paths:
+          - /types
+          - /joke/:type
+  - name: submit-service
+    url: http://jokes-submit-service:3200
+    routes:
+      - name: submit-route
+        paths:
+          - /submit
+          - /types
+          - /docs
+  - name: moderate-service
+    url: http://jokes-moderate-service:3100
+    routes:
+      - name: moderate-route
+        paths:
+          - /moderate
+          - /types
+          - /moderated
